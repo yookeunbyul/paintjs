@@ -4,11 +4,15 @@ const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 
-//실제 픽셀 사이즈 설정
-canvas.width = 700;
-canvas.height = 700;
+const INITIAL_CLOR = "#2c2c2c";
+const CANVAS_SIZE = 700;
 
-ctx.strokeStyle = "#2c2c2c";
+//실제 픽셀 사이즈 설정
+canvas.width = CANVAS_SIZE;
+canvas.height = CANVAS_SIZE;
+
+ctx.strokeStyle = INITIAL_CLOR;
+ctx.fillStyle = INITIAL_CLOR;
 ctx.lineWidth = 2.5;
 
 let painting = false;
@@ -37,6 +41,7 @@ function onMouseMove(event) {
 function handleColorClick(event){
     const color = event.target.style.backgroundColor;
     ctx.strokeStyle = color;
+    ctx.fillStyle = color //채워지는 색 = 선 색
 }
 
 function handleRangeChange(event){
@@ -54,11 +59,18 @@ function handleModeClick(){
     }
 }
 
+function handleCanvasClick(){
+    if(filling){
+        ctx.fillRect(0,0,CANVAS_SIZE,CANVAS_SIZE);
+    }
+}
+
 if(canvas){
     canvas.addEventListener("mousemove", onMouseMove);
     canvas.addEventListener("mousedown", startPainting);
     canvas.addEventListener("mouseup", stopPainting);
     canvas.addEventListener("mouseleave", stopPainting);
+    canvas.addEventListener("click", handleCanvasClick);
 }
 
 Array.from(colors).forEach(color => color.addEventListener("click", handleColorClick));
